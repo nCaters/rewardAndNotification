@@ -11,7 +11,7 @@ app.use(morgan('dev'));
 // app.use(cors());
 app.use(express.json());
 
-const port = process.env.PORT || 3001;
+const port = process.env.SERVER_PORT || 3002;
 
 // testing
 app.get('/api/v1/test', async (req, res) => {
