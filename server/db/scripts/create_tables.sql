@@ -31,6 +31,7 @@ CREATE TABLE "user" (
     user_id VARCHAR ( 50 ) PRIMARY KEY,
     role_id INTEGER,
 	name VARCHAR ( 50 ) NOT NULL,
+	username VARCHAR ( 50 ) NOT NULL,
 	password VARCHAR ( 50 ) NOT NULL,
 	FOREIGN KEY(role_id)
 		REFERENCES role(role_id)

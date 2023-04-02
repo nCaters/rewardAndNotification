@@ -5,7 +5,7 @@ const app = express();
 
 const db = require('./db');
 
-// For middle wares
+// For middlewares
 app.use(morgan('dev'));
 
 // app.use(cors());
@@ -35,7 +35,9 @@ app.get('/api/v1/test', async (req, res) => {
 app.get('/api/v1/food', async (req, res) => {
   try {
     //const results = await db.query("select * from restaurants");
-    const test = await db.query('select b.name as cuisine, c.name as meal, a.name, a.cost from food a Inner join cuisine b on b.cuisine_id = a.cuisine_id Inner join meal c on c.meal_id = a.meal_id');
+    const test = await db.query(
+      'select b.name as cuisine, c.name as meal, a.name, a.cost from food a Inner join cuisine b on b.cuisine_id = a.cuisine_id Inner join meal c on c.meal_id = a.meal_id'
+    );
 
     res.status(200).json({
       status: 'success',
