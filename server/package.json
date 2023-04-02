@@ -2,9 +2,9 @@
   "name": "ncaters",
   "version": "1.0.0",
   "description": "nCaters",
-  "main": "server/server.js",
+  "main": "server.js",
   "scripts": {
-    "server": "nodemon server/server.js",
+    "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
