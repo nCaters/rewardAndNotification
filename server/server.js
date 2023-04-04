@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const app = express();
 const jwt = require('jsonwebtoken');
 
+const ROLE = require('./common/enums/roles');
+
 const db = require('./db');
 
 // For middlewares
@@ -32,6 +34,18 @@ app.get('/api/v1/test', async (req, res) => {
   }
 });
 
+app.post('/api/v1/refreshToken', async (req, res) => {
+  // take the refresh token from the user
+  const refreshToken = req.body.token;
+
+  // send error if there is no token or it is not valid
+  if (!refreshToken) {
+    return res.status(401).json('You are not authenticated!');
+  }
+
+  // if everything is ok, create new access token or refresh token and send to user
+});
+
 app.post('/api/v1/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -43,7 +57,9 @@ app.post('/api/v1/login', async (req, res) => {
   if (user) {
     const data = user.rows[0];
     // Generate an access token
-    const accessToken = jwt.sign(data, process.env.SECRET_ACCESS_TOKEN);
+    const accessToken = jwt.sign(data, process.env.SECRET_ACCESS_TOKEN, {
+      expiresIn: '20s',
+    });
     // res.json({
     //   status: 'success',
     //   results: user.rows.length,
@@ -78,6 +94,20 @@ const verify = (req, res, next) => {
     res.status(401).json('You are not authenticated!');
   }
 };
+
+app.delete('/api/v1/users/:userId', verify, (req, res) => {
+  const paramId = req.params.userId;
+  const { user_id, role_id } = req.user;
+
+  if (user_id === paramId || role_id === ROLE.ADMIN) {
+    res.status(200).json('User has been deleted');
+  } else {
+    res.status(403).json('You are not allowed to delete user');
+  }
+
+  console.log('user_id: ', user_id);
+  console.log('paramId: ', paramId);
+});
 
 // Get food
 app.get('/api/v1/food', async (req, res) => {
