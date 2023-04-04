@@ -103,5 +103,8 @@ CREATE TABLE food_of_the_day(
 		REFERENCES meal(meal_id)
 );
 
+CREATE TABLE token(
+	value VARCHAR (10485760)
+);
 
 
