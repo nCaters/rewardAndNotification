@@ -16,7 +16,18 @@ app.use(express.json());
 
 const port = process.env.SERVER_PORT || 3002;
 
-// testing
+// Functions
+const generateAccessToken = (user) => {
+  return jwt.sign(user, process.env.SECRET_ACCESS_TOKEN, {
+    expiresIn: '30s',
+  });
+};
+
+const generateRefreshToken = (user) => {
+  return jwt.sign(user, process.env.SECRET_REFRESH_TOKEN);
+};
+
+// Testing
 app.get('/api/v1/test', async (req, res) => {
   try {
     //const results = await db.query("select * from restaurants");
@@ -34,16 +45,6 @@ app.get('/api/v1/test', async (req, res) => {
   }
 });
 
-const generateAccessToken = (user) => {
-  return jwt.sign(user.rows[0], process.env.SECRET_ACCESS_TOKEN, {
-    expiresIn: '20s',
-  });
-};
-
-const generateRefreshToken = (user) => {
-  return jwt.sign(user.rows[0], process.env.SECRET_REFRESH_TOKEN);
-};
-
 app.post('/api/v1/refreshToken', async (req, res) => {
   //take the refresh token from the user
   const refreshToken = req.body.token;
@@ -51,17 +52,11 @@ app.post('/api/v1/refreshToken', async (req, res) => {
   //send error if there is no token or it's invalid
   if (!refreshToken) return res.status(401).json('You are not authenticated!');
 
-  // Check Database for refresh token validity
+  // Check Database for token validity
   const refreshTokenFromDb = await db.query(
     `select * from token where value = $1`,
     [refreshToken]
   );
-
-  // if (refreshTokenFromDb) {
-  //   console.log('refreshTokenFromDb: ', refreshTokenFromDb);
-  // } else {
-  //   return res.status(403).json('Refresh token is not valid!');
-  // }
 
   if (!refreshTokenFromDb) {
     return res.status(403).json('Refresh token is not valid!');
@@ -74,34 +69,38 @@ app.post('/api/v1/refreshToken', async (req, res) => {
       err && console.log(err);
       console.log('jwt.verify user', user);
       // refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-      const client = await db.getClient();
+      const clientDelete = await db.getClient();
       try {
-        await client.query('BEGIN');
+        await clientDelete.query('BEGIN');
         const deleteRefreshTokenText = 'DELETE FROM token WHERE value = ($1)';
         const deleteRefreshTokenValues = [refreshToken];
-        await client.query(deleteRefreshTokenText, deleteRefreshTokenValues);
-        await client.query('COMMIT');
+        await clientDelete.query(
+          deleteRefreshTokenText,
+          deleteRefreshTokenValues
+        );
+        await clientDelete.query('COMMIT');
       } catch (e) {
-        await client.query('ROLLBACK');
+        await clientDelete.query('ROLLBACK');
         throw e;
       } finally {
-        client.release();
+        clientDelete.release();
       }
 
       const newAccessToken = generateAccessToken(user);
       const newRefreshToken = generateRefreshToken(user);
 
+      const clientInsert = await db.getClient();
       try {
-        await client.query('BEGIN');
+        await clientInsert.query('BEGIN');
         const insertTokenText = 'INSERT INTO token(value) VALUES ($1)';
         const insertTokenValues = [newRefreshToken];
-        await client.query(insertTokenText, insertTokenValues);
-        await client.query('COMMIT');
+        await clientInsert.query(insertTokenText, insertTokenValues);
+        await clientInsert.query('COMMIT');
       } catch (e) {
-        await client.query('ROLLBACK');
+        await clientInsert.query('ROLLBACK');
         throw e;
       } finally {
-        client.release();
+        clientInsert.release();
       }
 
       res.status(200).json({
@@ -124,8 +123,8 @@ app.post('/api/v1/login', async (req, res) => {
 
   if (user) {
     // Generate an access token
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+    const accessToken = generateAccessToken(user.rows[0]);
+    const refreshToken = generateRefreshToken(user.rows[0]);
 
     const client = await db.getClient();
     try {
