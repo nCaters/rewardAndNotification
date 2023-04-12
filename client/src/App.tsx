@@ -6,26 +6,26 @@ import Home from "./pages/Home"
 function App() {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/foodListing">Food</Link>
-            </li>
-          </ul>
-        </nav>
-        <Routes>
-          <Route path="/" Component={Home} />
-          <Route path="/foodListing" Component={FoodListing} />
-        </Routes>
-      </div>
-    </Router>
+    <div>
+      <nav>
+        <ul className="nav-list">
+          <li>
+            <Link to="/login" className="nav-link">Login</Link>
+          </li>
+          <li>
+            <Link to="/" className="nav-link">Home</Link>
+          </li>
+          <li>
+            <Link to="/foodListing" className="nav-link">Food</Link>
+          </li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/foodListing" element={<FoodListing />} />
+      </Routes>
+    </div>
+  </Router>
   );
 }
 
