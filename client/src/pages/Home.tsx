@@ -1,9 +1,9 @@
-import logo from './ncatersicon.PNG'; 
 const Home = () => {
+    const logo = require('./ncatersicon.PNG');
     return (
         <><h1>
-            Home
-        </h1><img src={logo} /></>
+            Welcome to nCaterS
+        </h1><img src={logo} width="400" height="320"/></>
     );
 };
 
