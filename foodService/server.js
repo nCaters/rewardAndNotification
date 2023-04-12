@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 // app.use(cors());
 app.use(express.json());
 
-const port = process.env.FOOD_SERVICE_SERVER_PORT || 3004;
+const port = 3002;
 
 // Functions
 const generateAccessToken = (user) => {
@@ -49,15 +49,38 @@ app.get('/api/v1/test', async (req, res) => {
 app.get('/api/v1/food', async (req, res) => {
   try {
     //const results = await db.query("select * from restaurants");
-    const test = await db.query(
+    const result = await db.query(
       'select b.name as cuisine, c.name as meal, a.name, a.cost from food a Inner join cuisine b on b.cuisine_id = a.cuisine_id Inner join meal c on c.meal_id = a.meal_id'
     );
 
     res.status(200).json({
       status: 'success',
-      results: test.rows.length,
+      results: result.rows.length,
       data: {
-        restaurants: test.rows,
+        food: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Make food preference
+app.post('/api/v1/preference', async (req, res) => {
+  try {
+    var user_id = req.body.user_id;
+    var meal_id = req.body.meal_id;
+    var food_id = req.body.food_id;
+
+    const result = await db.query(
+      `INSERT INTO Preference (user_id, meal_id, date, food_id) VALUES($1, $2,CURRENT_DATE, $3)`, [user_id, meal_id, food_id]
+    );
+
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+        test: result.rows,
       },
     });
   } catch (err) {
