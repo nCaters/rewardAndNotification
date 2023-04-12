@@ -5,8 +5,8 @@ import Home from "./pages/Home"
 
 function App() {
   return (
+    <div className="App">
     <Router>
-    <div>
       <nav>
         <ul className="nav-list">
           <li>
@@ -24,8 +24,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/foodListing" element={<FoodListing />} />
       </Routes>
-    </div>
-  </Router>
+    </Router>
+  </div>
   );
 }
 
