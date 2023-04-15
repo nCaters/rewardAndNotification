@@ -18,6 +18,12 @@ function App() {
           <li>
             <Link to="/foodListing" className="nav-link">Food</Link>
           </li>
+          <li>
+            <Link to="/canteenStaff" className="nav-link">Canteen Staff</Link>
+          </li>
+          <li>
+            <Link to="/admin" className="nav-link">Admin</Link>
+          </li>
         </ul>
       </nav>
       <Routes>
