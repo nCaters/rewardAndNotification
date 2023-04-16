@@ -29,8 +29,15 @@ Insert into food values(13, 3, 3, 'Masala Dosa', '4', CURRENT_DATE);
 Insert into food values(14, 4, 3, 'Mee Bakso', '3', CURRENT_DATE);
 Insert into food values(15, 5, 3, 'ABC soup', '2', CURRENT_DATE);
 
+
+select * from food
+
 -- preference;
 Insert into preference values('2', 2, CURRENT_DATE, 2);
 Insert into preference values('3', 2, CURRENT_DATE, 3);
 Insert into preference values('4', 2, CURRENT_DATE, 3);
 Insert into preference values('5', 2, CURRENT_DATE, 1);
+
+select * from preference p where meal_id  = 2;
+
+
