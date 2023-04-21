@@ -1,3 +1,7 @@
+-- set extensions 
+CREATE extension if not exists "uuid-ossp";
+
+-- create tables
 CREATE TABLE meal (
     meal_id INTEGER PRIMARY KEY,
 	name VARCHAR ( 50 ) NOT NULL
@@ -27,19 +31,21 @@ CREATE TABLE notification (
 	date DATE NOT NULL
 );
 
+
 CREATE TABLE "user" (
-    user_id VARCHAR ( 50 ) PRIMARY KEY,
+    user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     role_id INTEGER,
-	name VARCHAR ( 50 ) NOT NULL,
-	username VARCHAR ( 50 ) NOT NULL,
-	password VARCHAR ( 50 ) NOT NULL,
+	name VARCHAR ( 255 ) NOT NULL,
+	username VARCHAR ( 255 ) NOT NULL,
+	email VARCHAR ( 255 ) NOT NULL,
+	password VARCHAR ( 255 ) NOT NULL,
 	FOREIGN KEY(role_id)
 		REFERENCES role(role_id)
 );
 
 CREATE TABLE point (
 	points_earned INTEGER ,
-	user_id VARCHAR ( 50 ),
+	user_id uuid ,
 	FOREIGN KEY (user_id) REFERENCES "user"(user_id)
 );
 
@@ -69,7 +75,7 @@ CREATE TABLE wastage (
 CREATE TABLE rating (
 	food_rating DECIMAL(3,2) NOT null,
 	food_id INTEGER,
-	user_id VARCHAR ( 50 ),
+	user_id uuid,
 	FOREIGN KEY(food_id)
 	REFERENCES food(food_id),
 	FOREIGN KEY(user_id)
@@ -78,7 +84,7 @@ CREATE TABLE rating (
 
 
 CREATE TABLE preference (
-    user_id VARCHAR ( 50 ),
+    user_id uuid,
     meal_id INTEGER,
     date DATE,
 	food_id INTEGER,
@@ -103,8 +109,5 @@ CREATE TABLE food_of_the_day(
 		REFERENCES meal(meal_id)
 );
 
-CREATE TABLE token(
-	value VARCHAR (10485760)
-);
 
 
