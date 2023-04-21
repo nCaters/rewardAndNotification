@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import FoodListing from "./pages/FoodListing";
 import Home from "./pages/Home"
 import FoodPreference from './pages/FoodPreference';
+import Reward from './pages/Reward';
 
 function App() {
   return (
@@ -23,10 +24,7 @@ function App() {
             <Link to="/foodPreference" className="nav-link">Preference</Link>
           </li>
           <li>
-            <Link to="/canteenStaff" className="nav-link">Canteen Staff</Link>
-          </li>
-          <li>
-            <Link to="/admin" className="nav-link">Admin</Link>
+            <Link to="/reward" className="nav-link">Reward</Link>
           </li>
         </ul>
       </nav>
@@ -34,6 +32,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/foodListing" element={<FoodListing />} />
         <Route path="/foodPreference" element={<FoodPreference />} />
+        <Route path="/reward" element={<Reward />} />
       </Routes>
     </Router>
   </div>
