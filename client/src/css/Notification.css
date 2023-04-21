@@ -1,0 +1,24 @@
+#notification-message {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: 60%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#notification-message h3 {
+    text-align: center;
+}
+
+#notification-message td {
+    background-color: #259dff;
+    height: 5vw;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+    box-sizing: border-box;
+    text-decoration: none;
+    border-radius: 10px;
+    width: 60vw;
+}
