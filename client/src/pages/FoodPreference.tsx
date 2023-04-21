@@ -2,15 +2,6 @@ import React, { useEffect, useState } from 'react';
 import '../css/FoodPreference.css';
 import moment from 'moment';
 
-const table1Data = [
-  { id: 1, option: 'Option 1' },
-  { id: 2, option: 'Option 2' },
-];
-
-const table2Data = [
-  { id: 1, option: 'Option A' },
-  { id: 2, option: 'Option B' },
-];
 
 const FoodPreference = () => {
   const [mealSelected, setMealSelected] = useState({} as any);
@@ -18,7 +9,9 @@ const FoodPreference = () => {
   const [mealList, setMealList] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
-  const [tableData, setTableData] = useState(table1Data)
+  const [allTableData, setAllTableData] = useState({} as any)
+  const [tableData, setTableData] = useState([])
+
   const [selectedOption, setSelectedOption] = useState('')
 
   useEffect(() => {
@@ -26,8 +19,34 @@ const FoodPreference = () => {
       .then(response => response.json())
       .then(data => setMealList(data.data))
       .catch(error => console.error(error));
+
+
+    fetch('http://localhost:3002/api/v1/food')
+      .then(response => response.json())
+      .then(data => {
+        const foodData = data.data.food;
+        const breakfast = retrieveFoodDataByMeal(foodData, "Breakfast")
+        const lunch = retrieveFoodDataByMeal(foodData, "Lunch")
+        const dinner = retrieveFoodDataByMeal(foodData, "Dinner")
+        setTableData(breakfast)
+        setAllTableData({
+          breakfast,
+          lunch,
+          dinner
+        })
+      })
+      .catch(error => console.error(error));
   }, []);
 
+
+
+  function retrieveFoodDataByMeal(foodData: any, mealType: string) {
+    return foodData.filter((item: any) => {
+      if (item.meal === mealType) {
+        return item;
+      }
+    })
+  }
 
   const handleOptionChange = (event: any) => {
     setSelectedOption(event.target.value);
@@ -47,13 +66,13 @@ const FoodPreference = () => {
 
   const handleTableChange = (event: any) => {
     const tableSelected = event.target.value;
-    if (tableSelected === "1") {
-      setTableData(table1Data)
-    } else if (tableSelected === "2") {
-      setTableData(table2Data)
+    if (tableSelected === "Breakfast") {
+      setTableData(allTableData.breakfast)
+    } else if (tableSelected === "Lunch") {
+      setTableData(allTableData.lunch)
     }
     else {
-      setTableData(table2Data)
+      setTableData(allTableData.dinner)
     }
     setSelectedTable(event.target.value);
     setSubmitted(false)
@@ -61,14 +80,12 @@ const FoodPreference = () => {
 
 
 
-
   return (
     <>
-      <h1>Preference</h1>
-      <h2>{moment().format("DD MMM YYYY")}</h2>
-      <h2>Food of the day</h2>
+      <h1>Meal Preference for:</h1>
+      <h2>{moment().add(1, 'days').format("DD MMM YYYY")}</h2>
       <div>
-        <label>Indicate your meal preference: </label>
+        <label>Indicate your meal preference for tomorrow: </label>
         <select value={selectedTable} onChange={handleTableChange} className='select-element'>
           {mealList?.map((item: any) => (
             <option value={item.name}>{item.name}</option>
@@ -78,27 +95,31 @@ const FoodPreference = () => {
       <form onSubmit={handleSubmit}>
         <table className="radio-table">
           <thead>
-            <tr>
+            <tr key='1'>
               <th>Index</th>
-              <th>Option</th>
+              <th>Cuisine</th>
+              <th>Food</th>
+              <th>Cost</th>
             </tr>
           </thead>
           <tbody>
-            {tableData?.map((item: any) => (
+            {tableData?.map((item: any, index: number) => (
               <tr key={item.id}>
-                <td>{item.id}</td>
+                <td>{index + 1}</td>
+                <td>{item.cuisine}</td>
                 <td>
                   <label className="radio-label">
                     <input
                       type="radio"
-                      value={item.option}
-                      checked={selectedOption === item.option}
+                      value={item.name}
+                      checked={selectedOption === item.name}
                       onChange={handleOptionChange}
-                    />
+                      />
                     <span className="radio-custom"></span>
-                    {item.option}
+                    {item.name}
                   </label>
                 </td>
+                <td>${item.cost}</td>
               </tr>
             ))}
           </tbody>
