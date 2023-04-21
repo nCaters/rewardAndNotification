@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 // app.use(cors());
 app.use(express.json());
 
-const port = 3002;
+const port = process.env.SERVER_PORT;
 
 // Functions
 const generateAccessToken = (user) => {
@@ -26,6 +26,11 @@ const generateAccessToken = (user) => {
 const generateRefreshToken = (user) => {
   return jwt.sign(user, process.env.SECRET_REFRESH_TOKEN);
 };
+
+const cors = require('cors');
+app.use(cors({
+  origin: '*'
+}));
 
 // Testing
 app.get('/api/v1/test', async (req, res) => {
@@ -58,6 +63,26 @@ app.get('/api/v1/food', async (req, res) => {
       results: result.rows.length,
       data: {
         food: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Get meal
+app.get('/api/v1/meal', async (req, res) => {
+  try {
+    //const results = await db.query("select * from restaurants");
+    const result = await db.query(
+      'select meal_id, "name" from meal'
+    );
+
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+        meal: result.rows,
       },
     });
   } catch (err) {
