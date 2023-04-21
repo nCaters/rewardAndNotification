@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import './FoodListing.css';
+import React, { useState, useEffect } from "react";
+import "./FoodListing.css";
 
 const Reward = () => {
   const [rewards, setRewards] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3002/api/v1/reward')
-      .then(response => response.json())
-      .then(data => setRewards(data.data.reward))
-      .catch(error => console.error(error));
+    fetch("http://localhost:3004/api/v1/reward")
+      .then((response) => response.json())
+      .then((data) => setRewards(data.data.reward))
+      .catch((error) => console.error(error));
   }, []);
 
   const renderTableHeader = () => {

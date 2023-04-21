@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import FoodListing from "./pages/FoodListing";
 import Home from "./pages/Home"
-import Reward from './pages/Reward';
+import FoodPreference from './pages/FoodPreference';
 
 function App() {
   return (
@@ -20,14 +20,20 @@ function App() {
             <Link to="/foodListing" className="nav-link">Food</Link>
           </li>
           <li>
-            <Link to="/reward" className="nav-link">Reward</Link>
+            <Link to="/foodPreference" className="nav-link">Preference</Link>
+          </li>
+          <li>
+            <Link to="/canteenStaff" className="nav-link">Canteen Staff</Link>
+          </li>
+          <li>
+            <Link to="/admin" className="nav-link">Admin</Link>
           </li>
         </ul>
       </nav>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/foodListing" element={<FoodListing />} />
-        <Route path="/reward" element={<Reward />} />
+        <Route path="/foodPreference" element={<FoodPreference />} />
       </Routes>
     </Router>
   </div>
