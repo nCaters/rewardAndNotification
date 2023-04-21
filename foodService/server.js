@@ -81,9 +81,7 @@ app.get('/api/v1/meal', async (req, res) => {
     res.status(200).json({
       status: 'success',
       results: result.rows.length,
-      data: {
-        meal: result.rows,
-      },
+      data: result.rows,
     });
   } catch (err) {
     console.log(err);
@@ -112,6 +110,29 @@ app.post('/api/v1/preference', async (req, res) => {
     console.log(err);
   }
 });
+
+// add food
+// app.post('/api/v1/food-entry', async (req, res) => {
+//   try {
+//     var user_id = req.body.user_id;
+//     var meal_id = req.body.meal_id;
+//     var food_id = req.body.food_id;
+
+//     const result = await db.query(
+//       `INSERT INTO food (food_id, cuisine_id, meal_id, name, cost, date) VALUES($1, $2, $3, $4, $5, CURRENT_DATE)`, [food_id, cuisine_id, meal_id, name, cost]
+//     );
+
+//     res.status(200).json({
+//       status: 'success',
+//       results: result.rows.length,
+//       data: {
+//         test: result.rows,
+//       },
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`server is up and listening on  port ${port}`);
