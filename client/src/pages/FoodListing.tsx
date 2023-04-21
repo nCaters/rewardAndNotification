@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './FoodListing.css';
+import '../css/FoodListing.css';
 
 const FoodListing = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -33,7 +33,7 @@ const FoodListing = () => {
               <td>{restaurant.name}</td>
               <td>{restaurant.cuisine}</td>
               <td>{restaurant.meal}</td>
-              <td>{restaurant.cost}</td>
+              <td>${restaurant.cost}</td>
             </tr>
           );
         })}
