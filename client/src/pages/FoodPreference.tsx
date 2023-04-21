@@ -68,18 +68,24 @@ const FoodPreference = () => {
     const tableSelected = event.target.value;
     if (tableSelected === "Breakfast") {
       setTableData(allTableData.breakfast)
+      setSelectedOption(mealSelected.Breakfast)
     } else if (tableSelected === "Lunch") {
       setTableData(allTableData.lunch)
+      setSelectedOption(mealSelected.Lunch)
+
     }
     else {
       setTableData(allTableData.dinner)
+      setSelectedOption(mealSelected.Dinner)
+
     }
     setSelectedTable(event.target.value);
     setSubmitted(false)
   };
 
 
-
+console.log("selectedOption")
+console.log(selectedOption)
   return (
     <>
       <h1>Meal Preference for:</h1>
