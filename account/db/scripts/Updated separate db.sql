@@ -5,12 +5,16 @@ CREATE TABLE role (
 	description VARCHAR ( 50 ) NOT NULL
 );
 
+-- set extensions 
+CREATE extension if not exists "uuid-ossp";
+
 CREATE TABLE "user" (
-    user_id VARCHAR ( 50 ) PRIMARY KEY,
+    user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     role_id INTEGER,
-	name VARCHAR ( 50 ) NOT NULL,
-	username VARCHAR ( 50 ) NOT NULL,
-	password VARCHAR ( 50 ) NOT NULL,
+	name VARCHAR ( 255 ) NOT NULL,
+	username VARCHAR ( 255 ) NOT NULL,
+	email VARCHAR ( 255 ) NOT NULL,
+	password VARCHAR ( 255 ) NOT NULL,
 	FOREIGN KEY(role_id)
 		REFERENCES role(role_id)
 );
@@ -46,6 +50,8 @@ CREATE TABLE food (
 	FOREIGN KEY(meal_id)
 		REFERENCES meal(meal_id)
 );
+
+ALTER TABLE food ALTER COLUMN food_id ADD GENERATED ALWAYS AS IDENTITY (START WITH 1);
 
 CREATE TABLE wastage (
 	wastage_id INTEGER PRIMARY KEY,

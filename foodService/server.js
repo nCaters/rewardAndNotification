@@ -5,6 +5,7 @@ const app = express();
 const jwt = require('jsonwebtoken');
 
 const ROLE = require('./common/enums/roles');
+const authorize = require("./middleware/authorize");
 
 const db = require('./db');
 
@@ -31,24 +32,6 @@ const cors = require('cors');
 app.use(cors({
   origin: '*'
 }));
-
-// Testing
-app.get('/api/v1/test', async (req, res) => {
-  try {
-    //const results = await db.query("select * from restaurants");
-    const test = await db.query('select * from cuisine');
-
-    res.status(200).json({
-      status: 'success',
-      results: test.rows.length,
-      data: {
-        restaurants: test.rows,
-      },
-    });
-  } catch (err) {
-    console.log(err);
-  }
-});
 
 // Get food
 app.get('/api/v1/food', async (req, res) => {
@@ -112,27 +95,47 @@ app.post('/api/v1/preference', async (req, res) => {
 });
 
 // add food
-// app.post('/api/v1/food-entry', async (req, res) => {
-//   try {
-//     var user_id = req.body.user_id;
-//     var meal_id = req.body.meal_id;
-//     var food_id = req.body.food_id;
+app.post('/api/v1/food-entry', async (req, res) => {
+  try {
+    var cuisine_id = req.body.cuisine_id;
+    var meal_id = req.body.meal_id;
+    var name = req.body.name;
+    var cost = req.body.cost;
 
-//     const result = await db.query(
-//       `INSERT INTO food (food_id, cuisine_id, meal_id, name, cost, date) VALUES($1, $2, $3, $4, $5, CURRENT_DATE)`, [food_id, cuisine_id, meal_id, name, cost]
-//     );
+    const result = await db.query(
+      `INSERT INTO food (cuisine_id, meal_id, name, cost, date_added) VALUES($1, $2, $3, $4, CURRENT_DATE)`, [cuisine_id, meal_id, name, cost]
+    );
 
-//     res.status(200).json({
-//       status: 'success',
-//       results: result.rows.length,
-//       data: {
-//         test: result.rows,
-//       },
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Test authorization to get food
+app.get('/api/v1/foodAuth', authorize, async (req, res) => {
+  try {
+    //const results = await db.query("select * from restaurants");
+    const result = await db.query(
+      'select b.name as cuisine, c.name as meal, a.name, a.cost from food a Inner join cuisine b on b.cuisine_id = a.cuisine_id Inner join meal c on c.meal_id = a.meal_id'
+    );
+
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+        food: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 app.listen(port, () => {
   console.log(`server is up and listening on  port ${port}`);
