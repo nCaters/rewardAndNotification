@@ -116,6 +116,25 @@ app.post('/api/v1/food-entry', async (req, res) => {
     console.log(err);
   }
 });
+// Get wastage
+app.get('/api/v1/wastage', async (req, res) => {
+  try {
+    //const results = await db.query("select * from restaurants");
+    const result = await db.query(
+      'select w.wastage_id as id, w.date as wasteDate, f.name as foodName, w.food_waste_amount as wasteAmount from wastage w inner join food f on w.food_id = f.food_id'
+    );
+
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+        wastage: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 // Test authorization to get food
 app.get('/api/v1/foodAuth', authorize, async (req, res) => {

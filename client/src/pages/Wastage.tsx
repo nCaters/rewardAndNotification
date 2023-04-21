@@ -7,7 +7,7 @@ const Wastage = () => {
   useEffect(() => {
     fetch("http://localhost:3002/api/v1/wastage")
       .then((response) => response.json())
-      .then((data) => setWastages(data.data.reward))
+      .then((data) => setWastages(data.data.wastage))
       .catch((error) => console.error(error));
   }, []);
 
@@ -28,9 +28,10 @@ const Wastage = () => {
       <tbody>
         {wastages.map((wastage: any) => {
           return (
-            <tr key={wastage.reward_id}>
-              <td>{wastage.reward_type}</td>
-              <td>{wastage.point_needed}</td>
+            <tr key={wastage.id}>
+              <td>{wastage.wastedate.slice(0,10)}</td>
+              <td>{wastage.foodname}</td>
+              <td>{wastage.wasteamount}</td>
             </tr>
           );
         })}
