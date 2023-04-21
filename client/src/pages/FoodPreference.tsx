@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/FoodPreference.css';
 import moment from 'moment';
 
@@ -13,45 +13,54 @@ const table2Data = [
 ];
 
 const FoodPreference = () => {
-  const [selectedOption1, setSelectedOption1] = useState({} as any);
-  const [selectedOption2, setSelectedOption2] = useState({} as any);
+  const [mealSelected, setMealSelected] = useState({} as any);
   const [selectedTable, setSelectedTable] = useState('Breakfast');
+  const [mealList, setMealList] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
+  const [tableData, setTableData] = useState(table1Data)
+  const [selectedOption, setSelectedOption] = useState('')
+
+  useEffect(() => {
+    fetch('http://localhost:3002/api/v1/meal')
+      .then(response => response.json())
+      .then(data => setMealList(data.data))
+      .catch(error => console.error(error));
+  }, []);
+
+
   const handleOptionChange = (event: any) => {
-    if (selectedTable === 'Breakfast') {
-      setSelectedOption1({
-        meal: selectedTable,
-        selected: event.target.value
-      });
-    } else if (selectedTable === 'Lunch') {
-      setSelectedOption2({
-        meal: selectedTable,
-        selected: event.target.value
-      });
-    }
+    setSelectedOption(event.target.value);
+    setMealSelected((prev: any) => {
+      return {
+        ...prev, ...{
+          [selectedTable]: event.target.value
+        }
+      }
+    });
   };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log('Selected Option:');
-    console.log(selectedOption1);
-    console.log(selectedOption2);
     setSubmitted(true);
   };
 
   const handleTableChange = (event: any) => {
+    const tableSelected = event.target.value;
+    if (tableSelected === "1") {
+      setTableData(table1Data)
+    } else if (tableSelected === "2") {
+      setTableData(table2Data)
+    }
+    else {
+      setTableData(table2Data)
+    }
     setSelectedTable(event.target.value);
+    setSubmitted(false)
   };
 
-  let tableData, selectedOption: any;
-  if (selectedTable === 'Breakfast') {
-    tableData = table1Data;
-    selectedOption = selectedOption1.selected;
-  } else if (selectedTable === 'Lunch') {
-    tableData = table2Data;
-    selectedOption = selectedOption2.selected;
-  }
+
+
 
   return (
     <>
@@ -61,8 +70,9 @@ const FoodPreference = () => {
       <div>
         <label>Indicate your meal preference: </label>
         <select value={selectedTable} onChange={handleTableChange} className='select-element'>
-          <option value="Breakfast">Breakfast</option>
-          <option value="Lunch">Lunch</option>
+          {mealList?.map((item: any) => (
+            <option value={item.name}>{item.name}</option>
+          ))}
         </select>
       </div>
       <form onSubmit={handleSubmit}>
@@ -74,7 +84,7 @@ const FoodPreference = () => {
             </tr>
           </thead>
           <tbody>
-            {tableData?.map((item) => (
+            {tableData?.map((item: any) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>
@@ -96,10 +106,23 @@ const FoodPreference = () => {
         <button type="submit">Submit</button>
       </form>
       {submitted && (
-        <>
-          {/* <p>Selected Option for {selectedTable}: {selectedOption1}</p> */}
-          {/* <p>Selected Option for {selectedTable}, {selectedOption2}</p> */}
-        </>
+        <table className="radio-table">
+          <thead>
+            <tr>
+              <th>You have selected the options for:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr key={1}>
+              <td>
+                <p>Breakfast: {mealSelected.Breakfast}</p>
+                <p>Lunch: {mealSelected.Lunch}</p>
+                <p>Dinner: {mealSelected.Dinner}</p>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
       )}
     </>
   );
