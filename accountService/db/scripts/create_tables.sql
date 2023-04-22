@@ -35,7 +35,6 @@ CREATE TABLE notification (
 CREATE TABLE "user" (
     user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     role_id INTEGER,
-	name VARCHAR ( 255 ) NOT NULL,
 	username VARCHAR ( 255 ) NOT NULL,
 	email VARCHAR ( 255 ) NOT NULL,
 	password VARCHAR ( 255 ) NOT NULL,

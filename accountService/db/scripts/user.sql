@@ -6,6 +6,9 @@ insert into role (role_id, description)
 values('1','user');
 select * from role;
 
+insert into role (role_id, description)
+values('2','cater');
+select * from role;
 
 
 select * from "user";

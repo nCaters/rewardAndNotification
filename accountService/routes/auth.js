@@ -3,12 +3,15 @@ const db = require("../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
 const validate = require("../middleware/validate");
+const authorize = require("../middleware/authorize");
 
 //Registering
 router.post("/register", validate, async (req, res) => {
   try {
     // 1. destructure the req.body
-    const { role_id, name, username, email, password } = req.body;
+    const { role_id, username, email, password } = req.body;
+
+    const role = Number(role_id);
 
     // 2. check if user exist (if user exist throw err)
     const user = await db.query(`select * from "user" where email = $1`, [
@@ -27,10 +30,10 @@ router.post("/register", validate, async (req, res) => {
 
     // 4. enter the new user inside our database
     const newUser = await db.query(
-      `insert into "user" (role_id, name, username, email, password)
-values($1,$2,$3,$4,$5) returning *
+      `insert into "user" (role_id, username, email, password)
+values($1,$2,$3,$4) returning *
 `,
-      [role_id, name, username, email, bcryptPassword]
+      [role, username, email, bcryptPassword]
     );
 
     // 5. generating our jwt token
@@ -73,6 +76,15 @@ router.post("/login", validate, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
+  }
+});
+
+router.post("/verify", authorize, (req, res) => {
+  try {
+    res.json(true);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
 });
 
