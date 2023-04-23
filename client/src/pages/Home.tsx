@@ -30,7 +30,6 @@ const Home = () => {
   return (
     <>
       <h1>Welcome to nCaterS</h1>
-      <body id='notification-message'>{renderData()}</body>
       <img src={logo} width='400' height='320' />
 
       <div className='d-grid gap-2 col-6 mx-auto mt-5'>
