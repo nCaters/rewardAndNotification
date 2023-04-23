@@ -15,6 +15,7 @@ import Wastage from "./pages/Wastage";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Notification from "./pages/Notification"
 import { useEffect, useState } from "react";
 
 import { ToastContainer } from "react-toastify";
@@ -94,6 +95,13 @@ function App() {
                 <Navigate replace to='/login' />
               )
             }
+          />
+          <Route path="/notification" element={
+            isAuthenticated ? (
+              <Notification />
+            ) : (
+              <Navigate replace to='/login' />
+            )}
           />
         </Routes>
       </Router>

@@ -14,7 +14,7 @@ export default function Dashboard(props: any) {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const checkIfAdmin = (roleId: number) => {
-    if(roleId == 0) {
+    if (roleId == 0) {
       setIsAdmin(true);
     }
   }
@@ -60,10 +60,10 @@ export default function Dashboard(props: any) {
   const renderData = () => {
     return (
       <body>
-        {notification.length > 0 && <h3>Announcements:</h3> }
+        {notification.length > 0 && <h3>Announcements:</h3>}
         {notification.length > 0 && notification.map((item: any) => {
           return (
-              <p>{item.message}</p>
+            <p>{item.message}</p>
           );
         })}
       </body>
@@ -110,6 +110,11 @@ export default function Dashboard(props: any) {
             <li>
               <Link to='/wastage' className='nav-link'>
                 Wastage
+              </Link>
+            </li>
+            <li>
+              <Link to="/notification" className="nav-link">
+                Notification
               </Link>
             </li>
           </ul>
