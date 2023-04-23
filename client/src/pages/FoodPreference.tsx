@@ -97,10 +97,13 @@ const FoodPreference = () => {
     console.log("meal selected: " + JSON.stringify(mealSelected));
     console.log("food data: " + JSON.stringify(foodData));
 
+    var foodId = getFoodIdByName(selectedOption);
+    console.log("foodId: " + foodId);
+
     const requestBody: IRequestBody = {
       username: userName,
       meal_id: mealId,
-      food_id: 2,
+      food_id: foodId,
     };
 
     const response = await fetch('http://localhost:3002/api/v1/preference', {
@@ -145,6 +148,12 @@ const FoodPreference = () => {
 
 console.log("selectedOption")
 console.log(selectedOption)
+
+// Define the function to retrieve the food_id based on the selected food item name
+function getFoodIdByName(selectedFoodName: String) {
+  const selectedFoodItem = foodData.find((foodItem: { name: String; }) => foodItem.name === selectedFoodName);
+  return selectedFoodItem.food_id;
+}
   return (
     <>
       <h1>Meal Preference for:</h1>
