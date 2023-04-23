@@ -50,60 +50,14 @@ function App() {
   return (
     <div className='App'>
       <Router>
-        {!isAdmin && (
-          <nav>
-            <ul className='nav-list'>
-              <li>
-                <Link to='/login' className='nav-link'>
-                  Login
-                </Link>
-              </li>
-              <li>
-                <Link to='/' className='nav-link'>
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to='/foodListing' className='nav-link'>
-                  Food
-                </Link>
-              </li>
-              {/* <li>
-                <Link to='/foodPreference' className='nav-link'>
-                  Preference
-                </Link>
-              </li> */}
-              <li>
-                <Link to='/reward' className='nav-link'>
-                  Reward
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        )}
-        {isAdmin && (
-          <nav>
-            <ul className='nav-list'>
-              <li>
-                <Link to='/foodListing' className='nav-link'>
-                  Food
-                </Link>
-              </li>
-              <li>
-                <Link to='/wastage' className='nav-link'>
-                  Wastage
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        )}
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/foodListing' element={<FoodListing />} />
-          <Route path='/foodPreference'
+          <Route
+            path='/foodPreference'
             element={
               isAuthenticated ? (
-                <FoodPreference/>
+                <FoodPreference />
               ) : (
                 <Navigate replace to='/login' />
               )

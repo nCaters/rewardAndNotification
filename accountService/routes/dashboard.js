@@ -4,10 +4,9 @@ const authorize = require("../middleware/authorize");
 
 router.post("/", authorize, async (req, res) => {
   try {
-    const user = await db.query(
-      `SELECT username FROM "user" WHERE user_id = $1`,
-      [req.user.id]
-    );
+    const user = await db.query(`SELECT * FROM "user" WHERE user_id = $1`, [
+      req.user.id,
+    ]);
 
     res.json(user.rows[0]);
   } catch (err) {

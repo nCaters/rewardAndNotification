@@ -1,8 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function Login(props: any) {
+  const navigate = useNavigate();
   const { setAuth } = props;
 
   const [inputs, setInputs] = useState({
@@ -47,25 +48,32 @@ export default function Login(props: any) {
 
   return (
     <Fragment>
-      <h1 className='mt-5 text-center'>Login</h1>
-      <form onSubmit={onSubmitForm}>
-        <input
-          type='text'
-          name='email'
-          value={email}
-          onChange={(e) => onChangeInput(e)}
-          className='form-control my-3'
-        />
-        <input
-          type='password'
-          name='password'
-          value={password}
-          onChange={(e) => onChangeInput(e)}
-          className='form-control my-3'
-        />
-        <button className='btn btn-success btn-block'>Login</button>
-      </form>
-      <Link to='/register'>register</Link>
+      <div className='mt-5 text-center'>
+        <h1>Login</h1>
+        <form onSubmit={onSubmitForm}>
+          <input
+            type='text'
+            name='email'
+            value={email}
+            onChange={(e) => onChangeInput(e)}
+            className='form-control my-3'
+          />
+          <input
+            type='password'
+            name='password'
+            value={password}
+            onChange={(e) => onChangeInput(e)}
+            className='form-control my-3'
+          />
+          <button className='btn btn-outline-primary px-5'>Login</button>
+        </form>
+        <button
+          className='btn btn-outline-primary mt-3 px-2'
+          onClick={() => navigate("/register")}
+        >
+          Register
+        </button>
+      </div>
     </Fragment>
   );
 }

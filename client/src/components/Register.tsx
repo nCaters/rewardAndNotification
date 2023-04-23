@@ -1,8 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function Register(props: any) {
+  const navigate = useNavigate();
   const { setAuth } = props;
 
   const [inputs, setInputs] = useState({
@@ -54,45 +55,52 @@ export default function Register(props: any) {
 
   return (
     <Fragment>
-      <h1 className='mt-5 text-center'>Register</h1>
-      <form onSubmit={onSubmitForm}>
-        <select
-          id='role_id'
-          name='role_id'
-          className='form-select'
-          onChange={(e) => onChangeSelect(e)}
+      <div className='mt-5 text-center'>
+        <h1>Register</h1>
+        <form onSubmit={onSubmitForm}>
+          <select
+            id='role_id'
+            name='role_id'
+            className='form-select'
+            onChange={(e) => onChangeSelect(e)}
+          >
+            <option value='1'>NCS Staff</option>
+            <option value='2'>NCS Caterer</option>
+            <option value='0'>Admin</option>
+          </select>
+          <input
+            type='text'
+            name='username'
+            placeholder='username'
+            className='form-control my-3'
+            value={username}
+            onChange={(e) => onChangeInput(e)}
+          />
+          <input
+            type='email'
+            name='email'
+            placeholder='email'
+            className='form-control my-3'
+            value={email}
+            onChange={(e) => onChangeInput(e)}
+          />
+          <input
+            type='password'
+            name='password'
+            placeholder='password'
+            className='form-control my-3'
+            value={password}
+            onChange={(e) => onChangeInput(e)}
+          />
+          <button className='btn btn-outline-primary px-5'>Submit</button>
+        </form>
+        <button
+          className='btn btn-outline-primary mt-3 px-5'
+          onClick={() => navigate("/register")}
         >
-          <option value='1'>NCS Staff</option>
-          <option value='2'>NCS Caterer</option>
-          <option value='0'>Admin</option>
-        </select>
-        <input
-          type='text'
-          name='username'
-          placeholder='username'
-          className='form-control my-3'
-          value={username}
-          onChange={(e) => onChangeInput(e)}
-        />
-        <input
-          type='email'
-          name='email'
-          placeholder='email'
-          className='form-control my-3'
-          value={email}
-          onChange={(e) => onChangeInput(e)}
-        />
-        <input
-          type='password'
-          name='password'
-          placeholder='password'
-          className='form-control my-3'
-          value={password}
-          onChange={(e) => onChangeInput(e)}
-        />
-        <button className='btn btn-success btn-block'>Submit</button>
-      </form>
-      <Link to='/login'>login</Link>
+          Login
+        </button>
+      </div>
     </Fragment>
   );
 }
