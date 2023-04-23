@@ -10,6 +10,9 @@ export default function Dashboard(props: any) {
   const { setAuth } = props;
 
   const [name, setName] = useState("");
+  const [notification, setNotification] = useState([]);
+
+  const isAdmin: boolean = false;
 
   const getProfile = async () => {
     try {
@@ -40,7 +43,27 @@ export default function Dashboard(props: any) {
     getProfile();
   }, []);
 
-  const isAdmin: boolean = false;
+
+  useEffect(() => {
+    fetch('http://localhost:3003/api/v1/notification')
+      .then(response => response.json())
+      .then(data => setNotification(data.data.message))
+      .catch(error => console.error(error));
+  }, []);
+
+  const renderData = () => {
+    return (
+      <body>
+        {notification.length > 0 && <h3>Announcements:</h3> }
+        {notification.length > 0 && notification.map((item: any) => {
+          return (
+              <p>{item.message}</p>
+          );
+        })}
+      </body>
+    );
+  };
+
 
   return (
     <div className='mt-5 text-center'>
@@ -88,6 +111,7 @@ export default function Dashboard(props: any) {
       )}
       <h1 className='mt-5'>Dashboard</h1>
       <h2>Welcome {name}</h2>
+      {!isAdmin && <body className="notification-message"> {renderData()} </body>}
       <button onClick={(e) => logout(e)} className='btn btn-primary'>
         Logout
       </button>
