@@ -43,6 +43,8 @@ const FoodListing = () => {
 
   return (
     <>
+      <h1>Food of the day</h1>
+      <p>Display food of the day here</p>
       <h1>Food</h1>
       <table id="restaurant-table">
         {renderTableHeader()}

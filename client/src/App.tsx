@@ -68,11 +68,11 @@ function App() {
                   Food
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to='/foodPreference' className='nav-link'>
                   Preference
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link to='/reward' className='nav-link'>
                   Reward
@@ -100,7 +100,15 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/foodListing' element={<FoodListing />} />
-          <Route path='/foodPreference' element={<FoodPreference />} />
+          <Route path='/foodPreference'
+            element={
+              isAuthenticated ? (
+                <FoodPreference/>
+              ) : (
+                <Navigate replace to='/login' />
+              )
+            }
+          />
           <Route path='/reward' element={<Reward />} />
           <Route path='/wastage' element={<Wastage />} />
           <Route
