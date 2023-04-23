@@ -38,7 +38,7 @@ app.get('/api/v1/food', async (req, res) => {
   try {
     //const results = await db.query("select * from restaurants");
     const result = await db.query(
-      'select b.name as cuisine, c.name as meal, a.name, a.cost from food a Inner join cuisine b on b.cuisine_id = a.cuisine_id Inner join meal c on c.meal_id = a.meal_id'
+      'select b.name as cuisine, b.cuisine_id as cuisine_id, c.name as meal, c.meal_id as meal_id, a.name, a.cost, a.food_id as food_id from food a Inner join cuisine b on b.cuisine_id = a.cuisine_id Inner join meal c on c.meal_id = a.meal_id'
     );
 
     res.status(200).json({
@@ -72,25 +72,30 @@ app.get('/api/v1/meal', async (req, res) => {
 });
 
 // Make food preference
-app.post('/api/v1/preference', async (req, res) => {
+app.post('/api/v1/preference', authorize, async (req, res) => {
   try {
-    var user_id = req.body.user_id;
+    var username = req.body.username;
     var meal_id = req.body.meal_id;
     var food_id = req.body.food_id;
 
     const result = await db.query(
-      `INSERT INTO Preference (user_id, meal_id, date, food_id) VALUES($1, $2,CURRENT_DATE, $3)`, [user_id, meal_id, food_id]
+      `INSERT INTO Preference (username, meal_id, date, food_id) VALUES($1, $2,CURRENT_DATE, $3)`, [username, meal_id, food_id]
     );
 
     res.status(200).json({
       status: 'success',
       results: result.rows.length,
       data: {
-        test: result.rows,
       },
     });
   } catch (err) {
     console.log(err);
+    res.status(200).json({
+      status: 'fail',
+      data: {
+        Error: "You have already made a preference for tomorrow."
+      },
+    });
   }
 });
 

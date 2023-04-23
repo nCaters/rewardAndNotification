@@ -4,6 +4,13 @@ import moment from 'moment';
 
 
 const FoodPreference = () => {
+  
+  interface IRequestBody {
+    username: string;
+    meal_id: number;
+    food_id: number;
+  }
+  const [userName, setUserName] = useState('');
   const [mealSelected, setMealSelected] = useState({} as any);
   const [selectedTable, setSelectedTable] = useState('Breakfast');
   const [mealList, setMealList] = useState([]);
@@ -13,6 +20,9 @@ const FoodPreference = () => {
   const [tableData, setTableData] = useState([])
 
   const [selectedOption, setSelectedOption] = useState('')
+
+  const [foodData, setFoodData] = useState({} as any);
+  const [mealId, setMealId] = useState() as any;
 
   //login token
   const [token, setToken] = useState<string>('');
@@ -36,6 +46,7 @@ const FoodPreference = () => {
       .then(response => response.json())
       .then(data => {
         const foodData = data.data.food;
+        setFoodData(foodData);
         const breakfast = retrieveFoodDataByMeal(foodData, "Breakfast")
         const lunch = retrieveFoodDataByMeal(foodData, "Lunch")
         const dinner = retrieveFoodDataByMeal(foodData, "Dinner")
@@ -49,7 +60,18 @@ const FoodPreference = () => {
       .catch(error => console.error(error));
   }, []);
 
-
+  useEffect(() => {
+    fetch('http://localhost:3001/dashboard', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': `${token}`,
+      }
+    })
+      .then(response => response.json())
+      .then(data => setUserName(data.username))
+      .catch(error => console.error(error));
+  },[selectedOption]);
 
   function retrieveFoodDataByMeal(foodData: any, mealType: string) {
     return foodData.filter((item: any) => {
@@ -70,8 +92,33 @@ const FoodPreference = () => {
     });
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
+    console.log("meal selected: " + JSON.stringify(mealSelected));
+    console.log("food data: " + JSON.stringify(foodData));
+
+    const requestBody: IRequestBody = {
+      username: userName,
+      meal_id: mealId,
+      food_id: 2,
+    };
+
+    const response = await fetch('http://localhost:3002/api/v1/preference', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': `${token}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await response.json();
+    if (data.status === "fail") {
+      alert(data.data.Error);
+    } else {
+      alert("You have successfully made your preference");
+    }
+
     setSubmitted(true);
   };
 
@@ -80,15 +127,16 @@ const FoodPreference = () => {
     if (tableSelected === "Breakfast") {
       setTableData(allTableData.breakfast)
       setSelectedOption(mealSelected.Breakfast)
+      setMealId(1);
     } else if (tableSelected === "Lunch") {
       setTableData(allTableData.lunch)
       setSelectedOption(mealSelected.Lunch)
-
+      setMealId(2);
     }
     else {
       setTableData(allTableData.dinner)
       setSelectedOption(mealSelected.Dinner)
-
+      setMealId(3);
     }
     setSelectedTable(event.target.value);
     setSubmitted(false)

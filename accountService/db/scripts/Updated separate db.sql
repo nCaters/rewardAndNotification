@@ -82,11 +82,11 @@ CREATE TABLE rating (
 
 
 CREATE TABLE preference (
-    user_id VARCHAR ( 50 ),
+    username VARCHAR ( 255 ),
     meal_id INTEGER,
     date DATE,
 	food_id INTEGER,
-    PRIMARY KEY(user_id, meal_id, date),
+    PRIMARY KEY(username, meal_id, date),
 	FOREIGN KEY(meal_id)
 		REFERENCES meal(meal_id),
 	FOREIGN KEY(food_id)
