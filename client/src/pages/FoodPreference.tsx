@@ -14,7 +14,18 @@ const FoodPreference = () => {
 
   const [selectedOption, setSelectedOption] = useState('')
 
+  //login token
+  const [token, setToken] = useState<string>('');
+
   useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+
+    if (storedToken) {
+      setToken(storedToken);
+    }
+
+    console.log("token: " + token);
+
     fetch('http://localhost:3002/api/v1/meal')
       .then(response => response.json())
       .then(data => setMealList(data.data))
