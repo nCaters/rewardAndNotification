@@ -22,3 +22,51 @@
     border-radius: 10px;
     width: 60vw;
 }
+
+.h3,
+.h1 {
+    text-align: center;
+}
+
+/* table */
+.radio-table {
+    font-family: Calibri, sans-serif;
+    border-collapse: collapse;
+    width: 800px;
+}
+
+.radio-table th,
+.radio-table td {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.radio-table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.radio-label {
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* button */
+.buttons {
+    width: 400px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
+.action_buttons {
+    width: 200px;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+/* form */
+.form {
+    padding-bottom: 20px;
+    margin: 0;
+}

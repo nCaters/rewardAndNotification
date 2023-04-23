@@ -43,6 +43,42 @@ app.get('/api/v1/notification', async (req, res) => {
   }
 });
 
+app.get('/api/v1/get_Upcoming_Notifications', async (req, res) => {
+  try {
+    const result = await db.query('select * from notification where current_date <= date');
+
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+        notifications: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/api/v1/add_Notification', async (req, res) => {
+  try {
+    const { message, date } = req.body;
+
+    const result = await db.query(
+      `INSERT INTO notification (notification_id,message, date) VALUES(DEFAULT,$1, $2)`, [message, date]
+    );
+
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+        test: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.listen(port, () => {
   console.log(`server is up and listening on  port ${port}`);
 });

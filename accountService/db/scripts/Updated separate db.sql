@@ -110,7 +110,7 @@ CREATE TABLE food_of_the_day(
 DATABASE NAME: notification;
 
 CREATE TABLE notification (
-	notification_id INTEGER PRIMARY KEY,
+	notification_id SERIAL PRIMARY KEY,
 	message VARCHAR (100) NOT NULL,
 	date DATE NOT NULL
 );
