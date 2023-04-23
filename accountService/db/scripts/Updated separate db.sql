@@ -4,14 +4,12 @@ CREATE TABLE role (
     role_id INTEGER PRIMARY KEY,
 	description VARCHAR ( 50 ) NOT NULL
 );
-
 -- set extensions 
 CREATE extension if not exists "uuid-ossp";
 
 CREATE TABLE "user" (
     user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     role_id INTEGER,
-	name VARCHAR ( 255 ) NOT NULL,
 	username VARCHAR ( 255 ) NOT NULL,
 	email VARCHAR ( 255 ) NOT NULL,
 	password VARCHAR ( 255 ) NOT NULL,
@@ -21,9 +19,21 @@ CREATE TABLE "user" (
 
 CREATE TABLE point (
 	points_earned INTEGER ,
-	user_id VARCHAR ( 50 ),
+	user_id uuid ,
 	FOREIGN KEY (user_id) REFERENCES "user"(user_id)
 );
+
+insert into role (role_id, description)
+values('0','admin');
+
+insert into role (role_id, description)
+values('1','user');
+select * from role;
+
+insert into role (role_id, description)
+values('2','caterer');
+select * from role;
+
 ------------------------------------------------------------------------
 
 DATABASE NAME: food;
