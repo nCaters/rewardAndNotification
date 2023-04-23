@@ -126,15 +126,6 @@ export default function Dashboard(props: any) {
       <button onClick={(e) => logout(e)} className='btn btn-primary'>
         Logout
       </button>
-      <nav style={{ marginTop: "10px" }}>
-        <ul className='nav-list'>
-          <li>
-            <Link to='/foodPreference' className='nav-link'>
-              Make preference
-            </Link>
-          </li>
-        </ul>
-      </nav>
     </div>
   );
 }
