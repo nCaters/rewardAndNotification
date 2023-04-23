@@ -11,8 +11,13 @@ export default function Dashboard(props: any) {
 
   const [name, setName] = useState("");
   const [notification, setNotification] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const isAdmin: boolean = false;
+  const checkIfAdmin = (roleId: number) => {
+    if(roleId == 0) {
+      setIsAdmin(true);
+    }
+  }
 
   const getProfile = async () => {
     try {
@@ -23,6 +28,7 @@ export default function Dashboard(props: any) {
 
       const parseData = await res.json();
       setName(parseData.username);
+      checkIfAdmin(parseData.role_id);
     } catch (err: any) {
       console.error(err.message);
     }
