@@ -141,12 +141,12 @@ app.get('/api/v1/wastage', async (req, res) => {
   }
 });
 
-// Test authorization to get food
-app.get('/api/v1/foodAuth', authorize, async (req, res) => {
+// Get food
+app.get('/api/v1/food-of-the-day', async (req, res) => {
   try {
     //const results = await db.query("select * from restaurants");
     const result = await db.query(
-      'select b.name as cuisine, c.name as meal, a.name, a.cost from food a Inner join cuisine b on b.cuisine_id = a.cuisine_id Inner join meal c on c.meal_id = a.meal_id'
+      'Select a.date as date, b.name as name, c.name as meal from food_of_the_day a inner join food b on a.food_id = b.food_id inner join meal c on a.meal_id = c.meal_id'
     );
 
     res.status(200).json({
