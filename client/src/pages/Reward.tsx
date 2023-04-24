@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/FoodListing.css";
+import Dashboard from "../components/Dashboard";
 
 const Reward = () => {
   const [rewards, setRewards] = useState([]);
@@ -39,6 +40,7 @@ const Reward = () => {
 
   return (
     <>
+      <Dashboard />
       <h1>Rewards</h1>
       <table id="restaurant-table">
         {renderTableHeader()}

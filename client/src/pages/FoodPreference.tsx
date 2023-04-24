@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../css/FoodPreference.css';
 import moment from 'moment';
+import Dashboard from '../components/Dashboard';
 
 
 const FoodPreference = () => {
@@ -148,6 +149,7 @@ const FoodPreference = () => {
   }
   return (
     <>
+    <Dashboard/>
       <h1>Meal Preference for:</h1>
       <h2>{moment().add(1, 'days').format("DD MMM YYYY")}</h2>
       <div>

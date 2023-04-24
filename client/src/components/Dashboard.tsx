@@ -13,6 +13,8 @@ export default function Dashboard(props: any) {
   const [notification, setNotification] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const isDashboard = window.location.pathname === "/dashboard";
+
   const checkIfAdmin = (roleId: number) => {
     if (roleId == 0) {
       setIsAdmin(true);
@@ -83,7 +85,7 @@ export default function Dashboard(props: any) {
             </li>
             <li>
               <Link to='/foodListing' className='nav-link'>
-                Food
+                Food of the day
               </Link>
             </li>
             <li>
@@ -120,12 +122,15 @@ export default function Dashboard(props: any) {
           </ul>
         </nav>
       )}
-      <h1 className='mt-5'>Dashboard</h1>
-      <h2>Welcome {name}</h2>
-      {!isAdmin && <body className="notification-message"> {renderData()} </body>}
-      <button onClick={(e) => logout(e)} className='btn btn-primary'>
-        Logout
-      </button>
+      {isDashboard &&
+        <>
+          <h1 className='mt-5'>Dashboard</h1>
+          <h2>Welcome {name}</h2>
+          {!isAdmin && <body className="notification-message"> {renderData()} </body>}
+          <button onClick={(e) => logout(e)} className='btn btn-primary'>
+            Logout
+          </button>
+        </>}
     </div>
   );
 }
