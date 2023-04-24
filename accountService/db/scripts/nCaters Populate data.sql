@@ -26,9 +26,9 @@ Insert into food (cuisine_id, meal_id, name, cost, date_added)values( 5, 3, 'Veg
 
 
 -- food of the day
-Insert into food_of_the_day values('24/4/2023', 7, 1);
-Insert into food_of_the_day values('24/4/2023', 7, 1);
-Insert into food_of_the_day values('24/4/2023', 1, 2);
-Insert into food_of_the_day values('24/4/2023', 2, 2);
-Insert into food_of_the_day values('25/4/2023', 10, 2);
+Insert into food_of_the_day values('24/4/2023', 1, 1);
+Insert into food_of_the_day values('24/4/2023', 3, 1);
+Insert into food_of_the_day values('24/4/2023', 4, 2);
+Insert into food_of_the_day values('24/4/2023', 7, 2);
+Insert into food_of_the_day values('25/4/2023', 8, 2);
 Insert into food_of_the_day values('25/4/2023', 11, 3);
