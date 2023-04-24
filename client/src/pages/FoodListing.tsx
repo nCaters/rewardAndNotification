@@ -6,7 +6,11 @@ const FoodListing = () => {
     const [restaurants, setRestaurants] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3002/api/v1/food')
+        // fetch('http://localhost:3002/api/v1/food')
+        //     .then(response => response.json())
+        //     .then(data => setRestaurants(data.data.food))
+        //     .catch(error => console.error(error));
+        fetch('http://localhost:3002/api/v1/food-of-the-day')
             .then(response => response.json())
             .then(data => setRestaurants(data.data.food))
             .catch(error => console.error(error));
@@ -46,8 +50,6 @@ const FoodListing = () => {
         <>
             <Dashboard />
             <h1>Food of the day</h1>
-            <p>Display food of the day here</p>
-            <h1>Food</h1>
             <table id="restaurant-table">
                 {renderTableHeader()}
                 {renderTableData()}
