@@ -144,7 +144,7 @@ app.get('/api/v1/food-of-the-day', async (req, res) => {
   try {
     //const results = await db.query("select * from restaurants");
     const result = await db.query(
-      'Select a.date as date, b.name as name, c.name as meal from food_of_the_day a inner join food b on a.food_id = b.food_id inner join meal c on a.meal_id = c.meal_id where DATE(a.date) = CURRENT_DATE'
+      'Select a.date as date, b.name as name, c.name as meal, d.name as cuisine, b.cost as cost from food_of_the_day a inner join food b on a.food_id = b.food_id inner join meal c on a.meal_id = c.meal_id inner join cuisine d on b.cuisine_id = d.cuisine_id where DATE(a.date) = CURRENT_DATE'
     );
 
     res.status(200).json({
