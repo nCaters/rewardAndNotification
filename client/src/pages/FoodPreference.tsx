@@ -4,7 +4,7 @@ import moment from 'moment';
 
 
 const FoodPreference = () => {
-  
+
   interface IRequestBody {
     username: string;
     meal_id: number;
@@ -25,53 +25,45 @@ const FoodPreference = () => {
   const [mealId, setMealId] = useState() as any;
 
   //login token
-  const [token, setToken] = useState<string>('');
+  const storedToken = localStorage.getItem('token');
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-
     if (storedToken) {
-      setToken(storedToken);
-    }
-
-    console.log("token: " + token);
-
-    fetch('http://localhost:3002/api/v1/meal')
-      .then(response => response.json())
-      .then(data => setMealList(data.data))
-      .catch(error => console.error(error));
+      fetch('http://localhost:3002/api/v1/meal')
+        .then(response => response.json())
+        .then(data => setMealList(data.data))
+        .catch(error => console.error(error));
 
 
-    fetch('http://localhost:3002/api/v1/food')
-      .then(response => response.json())
-      .then(data => {
-        const foodData = data.data.food;
-        setFoodData(foodData);
-        const breakfast = retrieveFoodDataByMeal(foodData, "Breakfast")
-        const lunch = retrieveFoodDataByMeal(foodData, "Lunch")
-        const dinner = retrieveFoodDataByMeal(foodData, "Dinner")
-        setTableData(breakfast)
-        setAllTableData({
-          breakfast,
-          lunch,
-          dinner
+      fetch('http://localhost:3002/api/v1/food')
+        .then(response => response.json())
+        .then(data => {
+          const foodData = data.data.food;
+          setFoodData(foodData);
+          const breakfast = retrieveFoodDataByMeal(foodData, "Breakfast")
+          const lunch = retrieveFoodDataByMeal(foodData, "Lunch")
+          const dinner = retrieveFoodDataByMeal(foodData, "Dinner")
+          setTableData(breakfast)
+          setAllTableData({
+            breakfast,
+            lunch,
+            dinner
+          })
         })
-      })
-      .catch(error => console.error(error));
-  }, []);
-
-  useEffect(() => {
+        .catch(error => console.error(error));
+    }
     fetch('http://localhost:3001/dashboard', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'token': `${token}`,
+        // 'Content-Type': 'application/json',
+        'token': `${storedToken}`,
       }
     })
       .then(response => response.json())
       .then(data => setUserName(data.username))
       .catch(error => console.error(error));
-  },[selectedOption]);
+
+  }, [storedToken]);
 
   function retrieveFoodDataByMeal(foodData: any, mealType: string) {
     return foodData.filter((item: any) => {
@@ -82,6 +74,7 @@ const FoodPreference = () => {
   }
 
   const handleOptionChange = (event: any) => {
+    setSubmitted(false)
     setSelectedOption(event.target.value);
     setMealSelected((prev: any) => {
       return {
@@ -110,7 +103,7 @@ const FoodPreference = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'token': `${token}`,
+        'token': `${storedToken}`,
       },
       body: JSON.stringify(requestBody),
     });
@@ -126,6 +119,7 @@ const FoodPreference = () => {
   };
 
   const handleTableChange = (event: any) => {
+    setSelectedOption("")
     const tableSelected = event.target.value;
     if (tableSelected === "Breakfast") {
       setTableData(allTableData.breakfast)
@@ -146,14 +140,12 @@ const FoodPreference = () => {
   };
 
 
-console.log("selectedOption")
-console.log(selectedOption)
 
-// Define the function to retrieve the food_id based on the selected food item name
-function getFoodIdByName(selectedFoodName: String) {
-  const selectedFoodItem = foodData.find((foodItem: { name: String; }) => foodItem.name === selectedFoodName);
-  return selectedFoodItem.food_id;
-}
+  // Define the function to retrieve the food_id based on the selected food item name
+  function getFoodIdByName(selectedFoodName: String) {
+    const selectedFoodItem = foodData.find((foodItem: { name: String; }) => foodItem.name === selectedFoodName);
+    return selectedFoodItem.food_id;
+  }
   return (
     <>
       <h1>Meal Preference for:</h1>
@@ -188,7 +180,7 @@ function getFoodIdByName(selectedFoodName: String) {
                       value={item.name}
                       checked={selectedOption === item.name}
                       onChange={handleOptionChange}
-                      />
+                    />
                     <span className="radio-custom"></span>
                     {item.name}
                   </label>
@@ -198,7 +190,8 @@ function getFoodIdByName(selectedFoodName: String) {
             ))}
           </tbody>
         </table>
-        <button type="submit">Submit</button>
+        {selectedOption &&
+          <button type="submit">Submit</button>}
       </form>
       {submitted && (
         <table className="radio-table">
