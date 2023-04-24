@@ -45,6 +45,24 @@ const Notification = () => {
         }
     }
 
+    const handleDelete = async (id: number) => {
+        const reqbody = { id: id }
+        const response = await fetch('http://localhost:3003/api/v1/delete_Notification', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': `${storedToken}`,
+            },
+            body: JSON.stringify(reqbody),
+        })
+        const data = await response.json();
+        if (data.status === "fail") {
+            alert(data.data.Error);
+        } else {
+            alert("Notification has been successfully deleted");
+        }
+    }
+
     return (
         <>
             <h1 className='h1'>Manage Notifications</h1>
@@ -93,7 +111,7 @@ const Notification = () => {
                                 <tr key={item.notification_id}>
                                     <td>{moment(item.date).format('YYYY-MM-DD')}</td>
                                     <td>{item.message}</td>
-                                    <td><button>edit</button></td>
+                                    <td><button onClick={() => { handleDelete(item.notification_id) }}>delete</button></td>
                                 </tr>
                             ))}
                         </tbody>

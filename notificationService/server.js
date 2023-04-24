@@ -79,6 +79,26 @@ app.post('/api/v1/add_Notification', async (req, res) => {
   }
 });
 
+app.post('/api/v1/delete_Notification', async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const result = await db.query(
+      `DELETE FROM notification WHERE notification_id = $1`, [id]
+    );
+
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+        test: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.listen(port, () => {
   console.log(`server is up and listening on  port ${port}`);
 });
