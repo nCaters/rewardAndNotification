@@ -22,7 +22,7 @@ const FoodPreference = () => {
   const [selectedOption, setSelectedOption] = useState('')
 
   const [foodData, setFoodData] = useState({} as any);
-  const [mealId, setMealId] = useState() as any;
+  const [mealId, setMealId] = useState(1) as any;
 
   //login token
   const storedToken = localStorage.getItem('token');
@@ -112,7 +112,7 @@ const FoodPreference = () => {
     if (data.status === "fail") {
       alert(data.data.Error);
     } else {
-      alert("You have successfully made your preference");
+      alert(`You have successfully made your preference for: \n${selectedTable}: ${mealSelected[selectedTable]}`);
     }
 
     setSubmitted(true);

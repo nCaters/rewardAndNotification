@@ -74,9 +74,7 @@ app.get('/api/v1/meal', async (req, res) => {
 // Make food preference
 app.post('/api/v1/preference', authorize, async (req, res) => {
   try {
-    var username = req.body.username;
-    var meal_id = req.body.meal_id;
-    var food_id = req.body.food_id;
+    var { username, meal_id, food_id } = req.body
 
     const result = await db.query(
       `INSERT INTO Preference (username, meal_id, date, food_id) VALUES($1, $2,CURRENT_DATE, $3)`, [username, meal_id, food_id]
