@@ -11,6 +11,7 @@ const Notification = () => {
         message: '',
         date: ''
     });
+    const searchValue = useRef('');
 
     //login token
     const storedToken = localStorage.getItem('token');
@@ -31,6 +32,7 @@ const Notification = () => {
             alert(data.data.Error);
         } else {
             alert("You have successfully added a new notification");
+            refreshNotifications();
         }
     }
 
@@ -42,6 +44,16 @@ const Notification = () => {
         } else {
             setNotificationList(data.data.notifications);
             setShowNotificationList(!showNotificationList);
+        }
+    }
+
+    const refreshNotifications = async () => {
+        const response = await fetch('http://localhost:3003/api/v1/get_Upcoming_Notifications');
+        const data = await response.json();
+        if (data.status === "fail") {
+            alert(data.data.Error);
+        } else {
+            setNotificationList(data.data.notifications);
         }
     }
 
@@ -60,7 +72,32 @@ const Notification = () => {
             alert(data.data.Error);
         } else {
             alert("Notification has been successfully deleted");
+            refreshNotifications();
         }
+    }
+
+    const handleSearch = async (event: any) => {
+        event.preventDefault();
+        if (searchValue.current == '') {
+            refreshNotifications();
+        } else {
+            const reqbody = { date: searchValue.current }
+            const response = await fetch('http://localhost:3003/api/v1/search_Notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': `${storedToken}`,
+                },
+                body: JSON.stringify(reqbody),
+            })
+            const data = await response.json();
+            if (data.status === "fail") {
+                alert(data.data.Error);
+            } else {
+                setNotificationList(data.data.notifications);
+            }
+        }
+
     }
 
     return (
@@ -98,7 +135,15 @@ const Notification = () => {
                 <>
                     <h3 className='h3'>All upcoming notifications:</h3>
 
-                    <table className='radio-table'>
+                    <form>
+                        <input type="date" onChange={(e: any) => {
+                            searchValue.current = e.target.value
+                        }}></input>
+                        <input type="button" value={'search'} onClick={handleSearch}></input>
+                    </form>
+
+
+                    <table className='radio-table' key={+notificationList}>
                         <thead>
                             <tr key='1'>
                                 <th>Date</th>

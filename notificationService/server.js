@@ -99,6 +99,26 @@ app.post('/api/v1/delete_Notification', async (req, res) => {
   }
 });
 
+app.post('/api/v1/search_Notification', async (req, res) => {
+  try {
+    const { date } = req.body;
+
+    const result = await db.query(
+      `SELECT * FROM notification WHERE date = $1`, [date]
+    );
+
+    res.status(200).json({
+      status: 'success',
+      results: result.rows.length,
+      data: {
+        notifications: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.listen(port, () => {
   console.log(`server is up and listening on  port ${port}`);
 });
