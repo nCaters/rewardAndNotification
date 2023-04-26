@@ -138,6 +138,35 @@ app.get('/api/v1/wastage', async (req, res) => {
     console.log(err);
   }
 });
+// insert wasteage
+app.post("/api/v1/wasteage-entry", async (req, res) => {
+  try {
+    var date = req.body.date;
+    var food_waste_amount = req.body.food_waste_amount;
+    var food_id = req.body.food_id;
+
+    const result = await db.query(
+      `INSERT INTO wastage (date, food_waste_amount, food_id)
+      VALUES ($1, $2, $3)`,
+      [date, food_waste_amount, food_id]
+    );
+
+    if (!date) {
+      return res.status(400).json({
+        status: "error",
+        message: "Date field is required",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      results: result.rows.length,
+      data: {},
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 // Get food
 app.get('/api/v1/food-of-the-day', async (req, res) => {

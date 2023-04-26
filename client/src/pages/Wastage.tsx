@@ -29,7 +29,7 @@ const Wastage = () => {
         {wastages.map((wastage: any) => {
           return (
             <tr key={wastage.id}>
-              <td>{wastage.wastedate.slice(0,10)}</td>
+              <td>{wastage.wastedate.slice(0, 10)}</td>
               <td>{wastage.foodname}</td>
               <td>{wastage.wasteamount}</td>
             </tr>
@@ -39,9 +39,69 @@ const Wastage = () => {
     );
   };
 
+  const [date, setDate] = useState("");
+  const [foodWasteAmount, setFoodWasteAmount] = useState("");
+  const [foodId, setFoodId] = useState("");
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    const response = await fetch(
+      "http://localhost:3002/api/v1/wasteage-entry",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          date,
+          food_waste_amount: foodWasteAmount,
+          food_id: foodId,
+        }),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  };
+
+  const wastageForm = () => {
+    return (
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="date">Date:</label>
+          <input
+            type="date"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="foodWasteAmount">Food Waste Amount:</label>
+          <input
+            type="number"
+            id="foodWasteAmount"
+            value={foodWasteAmount}
+            onChange={(e) => setFoodWasteAmount(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="foodId">Food ID:</label>
+          <input
+            type="number"
+            id="foodId"
+            value={foodId}
+            onChange={(e) => setFoodId(e.target.value)}
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    );
+  };
+
   return (
     <>
       <h1>Wastage</h1>
+      {wastageForm()}
       <table id="restaurant-table">
         {renderTableHeader()}
         {renderTableData()}

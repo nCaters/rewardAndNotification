@@ -64,11 +64,11 @@ CREATE TABLE food (
 ALTER TABLE food ALTER COLUMN food_id ADD GENERATED ALWAYS AS IDENTITY (START WITH 1);
 
 CREATE TABLE wastage (
-	wastage_id INTEGER PRIMARY KEY,
-	date DATE,
-	food_waste_amount DECIMAL(5,2),
- 	food_id INTEGER,
-	FOREIGN KEY (food_id) REFERENCES food(food_id)
+  wastage_id SERIAL PRIMARY KEY,
+  date DATE,
+  food_waste_amount DECIMAL(5,2),
+  food_id INTEGER,
+  FOREIGN KEY (food_id) REFERENCES food(food_id)
 );
 
 
