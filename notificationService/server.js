@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 // app.use(cors());
 app.use(express.json());
 
-const port = 3003;
+const port = 3002;
 
 // Functions
 const generateAccessToken = (user) => {
