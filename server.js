@@ -16,6 +16,10 @@ app.use(express.json());
 
 const port = process.env.PORT;
 
+app.use(cors({
+  origin: '*'
+}));
+
 // Functions
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.SECRET_ACCESS_TOKEN, {
